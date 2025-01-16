@@ -170,8 +170,26 @@ void addVehicleInDataBase()
 
 }
 
-void searchVehicle() {
-    printf("Searching for a vehicle...\n");
+void searchVehicle(struct addVehicle *newVehicle, int vehicleCount)
+{
+    char searchName[50];
+    int found = 0, i;
+    printf("Enter the name of the vehicle to search: ");
+    scanf("%s", searchName);
+
+    for(i = 0; i < vehicleCount; i++)
+    {
+        struct addVehicle *currentVehicle = newVehicle + i;
+        if(strcmp(currentVehicle[i].vehicleName, searchName) == 0)
+        {
+            printf("Vehicle ID = %s\n", currentVehicle[i].vehicleID);
+            printf("Vehicle Name = %s\n", currentVehicle[i].vehicleName);
+            printf("Vehicle Manufacturer Name = %s\n", currentVehicle[i].manufacturerName);
+            printf("Vehicle issued date by Manufacturer (day/month/year) : %s\n", currentVehicle[i].issuedDate);
+            found = 1;
+            break;
+        }
+    }
 }
 
 void viewVehicles() {
@@ -324,4 +342,3 @@ void login(){
         printf("Login successful.\n");
     }
 }*/
-
