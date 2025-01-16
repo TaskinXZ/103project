@@ -190,6 +190,10 @@ void searchVehicle(struct addVehicle *newVehicle)
             found = 1;
             break;
         }
+    if(!found)
+        {
+        printf("No Record Found.\n");
+        }
     }
 }
 
