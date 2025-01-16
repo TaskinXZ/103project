@@ -172,8 +172,9 @@ void addVehicleInDataBase()
 
 }
 
-void searchVehicle(struct addVehicle *newVehicle, int vehicleCount)
+void searchVehicle(struct addVehicle *newVehicle)
 {
+    int vehicleCount;
     char searchName[50];
     int found = 0, i;
     printf("Enter the name of the vehicle to search: ");
@@ -269,6 +270,7 @@ void print_Message_in_Center(char title[40]) {
 void menu()
 {
     int choice;
+    char searchName;
 
     for(; ;)
     {
@@ -290,7 +292,7 @@ void menu()
             addVehicleInDataBase();
             break;
         case 2:
-            searchVehicle();
+            searchVehicle(searchName);
             break;
         case 3:
             viewVehicles();
