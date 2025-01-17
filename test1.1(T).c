@@ -15,6 +15,77 @@ void menu();
 void updateCredential();
 //void login();
 
+void headMessage_andCenter(char title[40]) {
+    head_Message();
+    print_Message_in_Center(title);
+
+}
+
+void print_Message_in_Center(char title[40]) {
+    int length = strlen(title);
+    int spacing = 42 - length;
+
+    printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
+    printf("                                                                           \n");
+
+
+    for (int i = 0; i < spacing; i++) {
+        printf(" ");
+    }
+
+    printf("%s\n", title);
+    printf("                                                                           \n");
+    printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n\n\n");
+}
+
+
+
+void menu()
+{
+    int choice;
+    char searchName;
+
+    for(; ;)
+    {
+        //print_Message_in_Center();
+        head_Message();
+        printf("1. Add Vehicle\n");
+        printf("2. Search Vehicle\n");
+        printf("3. View Vehicles\n");
+        printf("4. Delete Vehicle\n");
+        printf("5. Update Password\n");
+        printf("6. Exit\n");
+        printf("Enter choice: ");
+        do {
+            choice = getchar();
+        } while(ch>1 || ch>6)
+
+        switch(choice)
+        {
+        case 1:
+            addVehicleInDataBase();
+            break;
+        case 2:
+            searchVehicle(searchName);
+            break;
+        case 3:
+            viewVehicles();
+            break;
+        case 4:
+            deleteVehicle();
+            break;
+        case 5:
+            updatePassword();
+            break;
+        case 6:
+            exit(0);
+
+        }
+    }
+}
+
+
+
 struct addVehicle
 {
     char vehicleID[20];
@@ -234,11 +305,7 @@ void welcome_Message() {
     printf("Enter any key to continue. . . . .\n\n\n\n\n");
 }
 
-void headMessage_andCenter(char title[40]) {
-    head_Message();
-    print_Message_in_Center(title);
 
-}
 
 void head_Message() {
     printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
@@ -250,65 +317,6 @@ void head_Message() {
     printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n\n\n");
 }
 
-void print_Message_in_Center(char title[40]) {
-    int length = strlen(title);
-    int spacing = 42 - length;
-
-    printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
-    printf("                                                                           \n");
-
-
-    for (int i = 0; i < spacing; i++) {
-        printf(" ");
-    }
-
-    printf("%s\n", title);
-    printf("                                                                           \n");
-    printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n\n\n");
-}
-
-void menu()
-{
-    int choice;
-    char searchName;
-
-    for(; ;)
-    {
-        //print_Message_in_Center();
-        head_Message();
-        printf("1. Add Vehicle\n");
-        printf("2. Search Vehicle\n");
-        printf("3. View Vehicles\n");
-        printf("4. Delete Vehicle\n");
-        printf("5. Update Password\n");
-        printf("6. Exit\n");
-
-        printf("Enter choice: ");
-        scanf("%d", &choice);
-
-        switch(choice)
-        {
-        case 1:
-            addVehicleInDataBase();
-            break;
-        case 2:
-            searchVehicle(searchName);
-            break;
-        case 3:
-            viewVehicles();
-            break;
-        case 4:
-            deleteVehicle();
-            break;
-        case 5:
-            updatePassword();
-            break;
-        case 6:
-            exit(0);
-
-        }
-    }
-}
 
 /*void updateCredential(){
 
