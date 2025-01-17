@@ -21,7 +21,7 @@ char password[50] = "password";
 
 // Function to display header message
 void head_Message() {
-    printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
+    printf("\n\n\n<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
     printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
     printf("<~><~><~><~>                                                   <~><~><~><~>\n");
     printf("<~><~><~><~>             Vehicle Management System             <~><~><~><~>\n");
@@ -33,7 +33,7 @@ void head_Message() {
 // Function to print message in the center
 void print_Message_in_Center(char *message) {
     int length = strlen(message);
-    int spacing = 42 - length;
+    int spacing = 37 - length/2;
 
     printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
     printf("                                                                           \n");
@@ -51,7 +51,7 @@ void print_Message_in_Center(char *message) {
 
 // Function to show welcome message
 void welcome_Message() {
-    printf("         <~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>         \n");
+    printf("\n\n\n\n         <~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>         \n");
     printf("                                                                           \n");
     printf("               <~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>               \n");
     printf("               <~>                WELCOME                <~>               \n");
@@ -63,22 +63,28 @@ void welcome_Message() {
     printf("                                                                           \n");
     printf("         <~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>         \n\n\n\n");
 
-    printf("Enter any key to continue. . . . .\n\n\n\n\n");
+    printf("Enter any key to continue. . . . .\n\n\n\n");
+    getche();
+    printf("\n");
 }
 
 // Function to display the main menu
 void menu() {
     int choice;
     head_Message();
-    printf("Main Menu\n");
+    print_Message_in_Center("MAIN MENU");
     printf("1. Add Vehicle\n");
     printf("2. Search Vehicle\n");
     printf("3. View Vehicles\n");
     printf("4. Delete Vehicle\n");
     printf("5. Update Password\n");
-    printf("6. Exit\n");
+    printf("6. Exit\n\n\n\n");
     printf("Enter your choice: ");
     scanf("%d", &choice);
+
+    // Clear input buffer
+    while (getchar() != '\n');
+
     switch(choice) {
         case 1: addVehicleInDataBase(); break;
         case 2: searchVehicles(); break;
@@ -90,30 +96,42 @@ void menu() {
     }
 }
 
-// Function to validate names (Vehicle Name, Manufacturer Name)
-int is_Name_Valid(char *name) {
+// Function to validate the name (only letters and spaces allowed)
+int is_Name_Valid(const char *name) {
+    if (strlen(name) == 0) return 0;  // Empty name is invalid
+
     for (int i = 0; name[i] != '\0'; i++) {
-        if (!(isalpha(name[i]) || name[i] == ' ')) {
-            printf("Invalid name. Only letters and spaces are allowed.\n");
-            return 0;
+        if (!(isalpha(name[i]) || name[i] == ' ')) {  // Check for non-letter or non-space characters
+            return 0;  // Invalid if a non-letter/space is found
         }
     }
-    return 1;
+
+    return 1;  // Valid name
 }
 
-// Function to validate date input (dd/mm/yyyy)
-int is_Valid_Date(char *date) {
+
+// Function to validate the date (dd/mm/yyyy format)
+int is_Valid_Date(const char *date) {
     int day, month, year;
-    if (sscanf(date, "%d/%d/%d", &day, &month, &year) != 3) {
-        printf("Invalid date format.\n");
-        return 0;
+
+    // Check if the date matches dd/mm/yyyy format
+    if (sscanf(date, "%2d/%2d/%4d", &day, &month, &year) != 3) {
+        return 0;  // Invalid format
     }
-    if (month < 1 || month > 12 || day < 1 || day > 31 || year < 1900) {
-        printf("Invalid date value.\n");
-        return 0;
-    }
-    return 1;
+
+    // Validate day, month, and year ranges
+    if (month < 1 || month > 12) return 0;  // Month must be between 1 and 12
+    if (day < 1 || day > 31) return 0;     // Day must be between 1 and 31
+
+    // Additional simple check for 30-day months
+    if ((month == 4 || month == 6 || month == 9 || month == 11) && day > 30) return 0;
+    // February check (for simplicity, assumes non-leap year; you can add leap year check if needed)
+    if (month == 2 && day > 28) return 0;
+    if (year < 1900) return 0;  // Year should be reasonable (greater than 1900)
+
+    return 1;  // Valid date
 }
+
 
 // Function to add a new vehicle to the database
 void addVehicleInDataBase() {
@@ -122,48 +140,90 @@ void addVehicleInDataBase() {
         return;
     }
 
-    Vehicle *new_vehicle = &vehicles[vehicle_count];
-    char vehicle_name[50], manufacturer_name[50], issue_date[11];
+    Vehicle *new_vehicle = &vehicles[vehicle_count]; // Use an array to store vehicles
 
-    printf("Enter Vehicle ID: ");
-    scanf("%s", new_vehicle->vehicle_id);
-    printf("Enter Vehicle Name: ");
-    scanf(" %[^\n]%*c", vehicle_name);
-    if (!is_Name_Valid(vehicle_name)) {
-        return;
+    printf("\nENTER VEHICLE DETAILS BELOW:\n");
+    printf("------------------------------------------------------------------------------------");
+
+    // Input Vehicle ID (ensuring it's a valid integer)
+    int valid_input = 0;
+    while (!valid_input) {
+        printf("\n\nVehicle ID NO = ");
+        char id_input[10];
+        fgets(id_input, sizeof(id_input), stdin);
+        if (sscanf(id_input, "%d", &valid_input) == 1) {
+            snprintf(new_vehicle->vehicle_id, sizeof(new_vehicle->vehicle_id), "%d", valid_input); // Store as string
+        } else {
+            printf("Invalid input! Please enter a valid integer for Vehicle ID.\n");
+            valid_input = 0;
+        }
     }
-    strcpy(new_vehicle->vehicle_name, vehicle_name);
 
-    printf("Enter Manufacturer Name: ");
-    scanf(" %[^\n]%*c", manufacturer_name);
-    if (!is_Name_Valid(manufacturer_name)) {
-        return;
+    // Input Vehicle Name (validating the name)
+    while (1) {
+        printf("\n\nVehicle Name = ");
+        fgets(new_vehicle->vehicle_name, sizeof(new_vehicle->vehicle_name), stdin);
+        // Remove trailing newline
+        new_vehicle->vehicle_name[strcspn(new_vehicle->vehicle_name, "\n")] = '\0';
+        if (is_Name_Valid(new_vehicle->vehicle_name)) {
+            break;
+        }
+        printf("Invalid input! Please enter a valid vehicle name.\n");
     }
-    strcpy(new_vehicle->manufacturer_name, manufacturer_name);
 
-    printf("Enter Issue Date (dd/mm/yyyy): ");
-    scanf("%s", issue_date);
-    if (!is_Valid_Date(issue_date)) {
-        return;
+    // Input Manufacturer Name (validating the name)
+    while (1) {
+        printf("\n\nVehicle Manufacturer Name = ");
+        fgets(new_vehicle->manufacturer_name, sizeof(new_vehicle->manufacturer_name), stdin);
+        // Remove trailing newline
+        new_vehicle->manufacturer_name[strcspn(new_vehicle->manufacturer_name, "\n")] = '\0';
+        if (is_Name_Valid(new_vehicle->manufacturer_name)) {
+            break;
+        }
+        printf("Invalid input! Please enter a valid manufacturer name.\n");
     }
-    strcpy(new_vehicle->issue_date, issue_date);
 
+    // Input Issue Date (validating the date)
+    while (1) {
+        printf("\n\nVehicle issued date by Manufacturer (day/month/year): ");
+        fgets(new_vehicle->issue_date, sizeof(new_vehicle->issue_date), stdin);
+        // Remove trailing newline
+        new_vehicle->issue_date[strcspn(new_vehicle->issue_date, "\n")] = '\0';
+        if (is_Valid_Date(new_vehicle->issue_date)) {
+            break;
+        }
+        printf("Invalid input! Please enter a valid date in dd/mm/yyyy format.\n");
+    }
+
+    // Increment vehicle count
     vehicle_count++;
-    printf("Vehicle added successfully.\n");
+
+    // Confirm success and display the added vehicle details
+    printf("\n\n\nVehicle added successfully!\n");
+    printf("\nVehicle id: %s\n", new_vehicle->vehicle_id);
+    printf("\nVehicle Name: %s\n", new_vehicle->vehicle_name);
+    printf("\nManufacturer Name: %s\n", new_vehicle->manufacturer_name);
+    printf("\nVehicle issued date by Manufacturer (day/month/year) = %s\n", new_vehicle->issue_date);
 }
+
+
+
 
 // Function to search for a vehicle by name
 void searchVehicles() {
+
+    print_Message_in_Center("SEARCH VEHICLES");
+
     char search_name[50];
     printf("Enter vehicle name to search: ");
     scanf(" %[^\n]%*c", search_name);
 
     for (int i = 0; i < vehicle_count; i++) {
         if (strcmp(vehicles[i].vehicle_name, search_name) == 0) {
-            printf("Vehicle ID: %s\n", vehicles[i].vehicle_id);
+            printf("Vehicle id: %s\n", vehicles[i].vehicle_id);
             printf("Vehicle Name: %s\n", vehicles[i].vehicle_name);
             printf("Manufacturer Name: %s\n", vehicles[i].manufacturer_name);
-            printf("Issue Date: %s\n", vehicles[i].issue_date);
+            printf("Vehicle issued date by Manufacturer (day/month/year) = %s\n", vehicles[i].issue_date);
             return;
         }
     }
@@ -172,22 +232,28 @@ void searchVehicles() {
 
 // Function to view all stored vehicles
 void viewVehicles() {
+
+    print_Message_in_Center("VIEW VEHICLE DETAILS");
+
     if (vehicle_count == 0) {
         printf("No Record.\n");
         return;
     }
 
     for (int i = 0; i < vehicle_count; i++) {
-        printf("Vehicle ID: %s\n", vehicles[i].vehicle_id);
+        printf("Vehicle id: %s\n", vehicles[i].vehicle_id);
         printf("Vehicle Name: %s\n", vehicles[i].vehicle_name);
         printf("Manufacturer Name: %s\n", vehicles[i].manufacturer_name);
-        printf("Issue Date: %s\n", vehicles[i].issue_date);
+        printf("Vehicle issued date by Manufacturer (day/month/year) = %s\n", vehicles[i].issue_date);
         printf("\n");
     }
 }
 
 // Function to delete a vehicle by ID
 void deleteVehicles() {
+
+    print_Message_in_Center("Delete Vehicle Details");
+
     char vehicle_id[10];
     printf("Enter Vehicle ID to delete: ");
     scanf("%s", vehicle_id);
@@ -212,6 +278,9 @@ void deleteVehicles() {
 
 // Function to update username and password
 void updateCredential() {
+
+    print_Message_in_Center("Update Credentials");
+
     char new_username[50], new_password[50];
     printf("Enter new username: ");
     scanf("%s", new_username);
@@ -229,8 +298,12 @@ void updateCredential() {
 
 // Function to display login prompt
 int loginPrompt() {
+    head_Message();
+
     char input_username[50], input_password[50];
     int attempts = 3;
+
+    print_Message_in_Center("Login");
 
     while (attempts > 0) {
         printf("Enter username: ");
