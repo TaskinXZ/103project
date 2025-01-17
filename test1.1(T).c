@@ -190,15 +190,35 @@ void searchVehicle(struct addVehicle *newVehicle)
             found = 1;
             break;
         }
-    if(!found)
+    if(found == 0)
         {
         printf("No Record Found.\n");
-        }
+    }
     }
 }
 
-void viewVehicles() {
-    printf("Viewing all vehicles...\n");
+void viewVehicles(struct addVehicle *newVehicle)
+{
+    int vehicleCount, i, found = 0;
+    if(vehicleCount == 0)
+    {
+        printf("No record.\n");
+    }
+    printf("All Stored Vehicle Details:\n");
+
+
+        for(i = 0; i < vehicleCount; i++)
+        {
+            struct addVehicle *currentVehicle = newVehicle + i;
+            printf("Vehicle Count = %d\n", i+1);
+
+            printf("Vehicle ID = %s\n", currentVehicle[i].vehicleID);
+            printf("Vehicle Name = %s\n", currentVehicle[i].vehicleName);
+            printf("Vehicle Manufacturer Name = %s\n", currentVehicle[i].manufacturerName);
+            printf("Vehicle issued date by Manufacturer (day/month/year) : %s\n", currentVehicle[i].issuedDate);
+            found = 1;
+            break;
+        }
 }
 
 void deleteVehicle() {
@@ -271,10 +291,10 @@ void print_Message_in_Center(char title[40]) {
 
 void menu()
 {
-    int choice;
+    int choice, vehicleCount;
     char searchName;
 
-    for(; ;)
+    for(;;)
     {
         //print_Message_in_Center();
         head_Message();
@@ -297,7 +317,7 @@ void menu()
             searchVehicle(searchName);
             break;
         case 3:
-            viewVehicles();
+            viewVehicles(vehicleCount);
             break;
         case 4:
             deleteVehicle();
