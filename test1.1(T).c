@@ -263,11 +263,35 @@ void searchVehicle(struct addVehicle *newVehicle)
             found = 1;
             break;
         }
+    if(found == 0)
+        {
+        printf("No Record Found.\n");
+    }
     }
 }
 
-void viewVehicles() {
-    printf("Viewing all vehicles...\n");
+void viewVehicles(struct addVehicle *newVehicle)
+{
+    int vehicleCount, i, found = 0;
+    if(vehicleCount == 0)
+    {
+        printf("No record.\n");
+    }
+    printf("All Stored Vehicle Details:\n");
+
+
+        for(i = 0; i < vehicleCount; i++)
+        {
+            struct addVehicle *currentVehicle = newVehicle + i;
+            printf("Vehicle Count = %d\n", i+1);
+
+            printf("Vehicle ID = %s\n", currentVehicle[i].vehicleID);
+            printf("Vehicle Name = %s\n", currentVehicle[i].vehicleName);
+            printf("Vehicle Manufacturer Name = %s\n", currentVehicle[i].manufacturerName);
+            printf("Vehicle issued date by Manufacturer (day/month/year) : %s\n", currentVehicle[i].issuedDate);
+            found = 1;
+            break;
+        }
 }
 
 void deleteVehicle() {
@@ -317,6 +341,65 @@ void head_Message() {
     printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n\n\n");
 }
 
+void print_Message_in_Center(char title[40]) {
+    int length = strlen(title);
+    int spacing = 42 - length;
+
+    printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
+    printf("                                                                           \n");
+
+
+    for (int i = 0; i < spacing; i++) {
+        printf(" ");
+    }
+
+    printf("%s\n", title);
+    printf("                                                                           \n");
+    printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n\n\n");
+}
+
+void menu()
+{
+    int choice, vehicleCount;
+    char searchName;
+
+    for(;;)
+    {
+        //print_Message_in_Center();
+        head_Message();
+        printf("1. Add Vehicle\n");
+        printf("2. Search Vehicle\n");
+        printf("3. View Vehicles\n");
+        printf("4. Delete Vehicle\n");
+        printf("5. Update Password\n");
+        printf("6. Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch(choice)
+        {
+        case 1:
+            addVehicleInDataBase();
+            break;
+        case 2:
+            searchVehicle(searchName);
+            break;
+        case 3:
+            viewVehicles(vehicleCount);
+            break;
+        case 4:
+            deleteVehicle();
+            break;
+        case 5:
+            updatePassword();
+            break;
+        case 6:
+            exit(0);
+
+        }
+    }
+}
 
 /*void updateCredential(){
 
