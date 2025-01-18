@@ -11,7 +11,7 @@ void viewVehicles();
 void deleteVehicle();
 void menu();
 void updateCredential();
-//void login();
+void login();
 
 struct addVehicle
 {
@@ -172,6 +172,7 @@ void addVehicleInDataBase()
 
 void searchVehicle(struct addVehicle *newVehicle)
 {
+    print_Message_in_Center("SEARCH VEHICLES");
     int vehicleCount;
     char searchName[50];
     int found = 0, i;
@@ -199,6 +200,7 @@ void searchVehicle(struct addVehicle *newVehicle)
 
 void viewVehicles(struct addVehicle *newVehicle)
 {
+    print_Message_in_Center("VIEW VEHICLE DETAILS");
     int vehicleCount, i, found = 0;
     if(vehicleCount == 0)
     {
@@ -259,7 +261,7 @@ int main() {
 
     headMessage_andCenter(title);
     welcome_Message();
-    //login();
+    login();
     menu();
 
     return 0;
@@ -357,7 +359,7 @@ void menu()
     }
 }
 
-/*void updateCredential(){
+void updateCredential(){
 
     char userName[40];
     printf("New Username: ");
@@ -392,4 +394,5 @@ void login(){
     if (strcmp(userName, storedUsername) == 0 && strcmp(userPassword, storedPassword) == 0) {
         printf("Login successful.\n");
     }
-}*/
+}
+

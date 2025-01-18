@@ -3,15 +3,16 @@
 #include <string.h>
 #include <ctype.h>
 
+#define MAX_VEHICLES 100  // Define the maximum number of vehicles
 
-struct Vehicle {
+typedef struct Vehicle {
     char vehicle_id[10];
     char vehicle_name[50];
     char manufacturer_name[50];
     char issue_date[11];
 } Vehicle;
 
-struct Vehicle vehicles; // Array to hold vehicles
+Vehicle vehicles[MAX_VEHICLES]; // Array to hold vehicles
 int vehicle_count = 0; // To track the number of vehicles
 
 // Login credentials
