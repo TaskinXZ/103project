@@ -16,12 +16,7 @@ void deleteVehicle();
 void headMessage_andCenter(char title[40]);
 
 void updateCredential();
-
-
-int is_Name_Valid(char *name)
-int is_Valid_Date
-
-//void login();
+void login();
 
 struct vehicle_info {
     char vehicle_name[40];
@@ -160,6 +155,7 @@ void addVehicleInDataBase()
 
 void searchVehicle(struct addVehicle *newVehicle)
 {
+    print_Message_in_Center("SEARCH VEHICLES");
     int vehicleCount;
     char searchName[50];
     int found = 0, i;
@@ -187,6 +183,7 @@ void searchVehicle(struct addVehicle *newVehicle)
 
 void viewVehicles(struct addVehicle *newVehicle)
 {
+    print_Message_in_Center("VIEW VEHICLE DETAILS");
     int vehicleCount, i, found = 0;
     if(vehicleCount == 0)
     {
@@ -209,15 +206,49 @@ void viewVehicles(struct addVehicle *newVehicle)
         }
 }
 
-void deleteVehicle() {
-    printf("Deleting a vehicle...\n");
+void deleteVehicle(struct addVehicle *currentVehicle)
+{
+    print_Message_in_Center("Delete Vehicle Details");
+
+
+    char vehicleID[10];
+    int i, vehicle_count;
+    printf("Enter Vehicle ID to delete: ");
+    scanf("%s", vehicleID);
+
+    int found = 0;
+    for (i = 0; i < vehicle_count; i++) {
+        if (strcmp(currentVehicle[i].vehicleID, vehicleID) == 0) {
+            // Shift all elements after the deleted one
+            for (int j = i; j < vehicle_count - 1; j++) {
+                currentVehicle[j] = currentVehicle[j + 1];
+            }
+            vehicle_count--;
+            printf("Record deleted successfully.\n");
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("Record not found.\n");
+    }
+
 }
 
 void updatePassword() {
     printf("Updating password...\n");
 }
 
+int main() {
+    char title[40] = "Something";
 
+    headMessage_andCenter(title);
+    welcome_Message();
+    //login();
+    menu();
+
+    return 0;
+}
 
 void welcome_Message() {
     printf("         <~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>         \n");
@@ -249,7 +280,7 @@ void head_Message() {
 
 void print_Message_in_Center(char title[40]) {
     int length = strlen(title);
-    int spacing = 42 - length;
+    int spacing = 48 - length;
 
     printf("<~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~><~>\n");
     printf("                                                                           \n");
@@ -267,7 +298,7 @@ void print_Message_in_Center(char title[40]) {
 void menu()
 {
     int choice, vehicleCount;
-    char searchName;
+    char searchName, vehicleID;
 
     for(;;)
     {
@@ -295,7 +326,7 @@ void menu()
             viewVehicles(vehicleCount);
             break;
         case 4:
-            deleteVehicle();
+            deleteVehicle(vehicleID);
             break;
         case 5:
             updatePassword();
@@ -307,7 +338,7 @@ void menu()
     }
 }
 
-/*void updateCredential(){
+void updateCredential(){
 
     char userName[40];
     printf("New Username: ");
@@ -342,4 +373,5 @@ void login(){
     if (strcmp(userName, storedUsername) == 0 && strcmp(userPassword, storedPassword) == 0) {
         printf("Login successful.\n");
     }
-}*/
+}
+
